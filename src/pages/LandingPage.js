@@ -4,7 +4,10 @@ import AddComment from "../components/AddComment";
 import CommentList from "../components/CommentList";
 import Loading from "../components/Loading";
 import ky from "ky";
-import { useQuery, useMutation, useQueryCache } from "react-query";
+import {
+    useQuery,
+    // useMutation, useQueryCache
+} from "react-query";
 // import UserProvider from "../contexts/UserProvider";
 
 function LandingPage(props) {
@@ -39,9 +42,9 @@ function LandingPage(props) {
     const getComments = async (key) => {
         let url;
         if (sortBy) {
-            url = `http://localhost:4000/api/v1/comments/?sort=-${sortBy}`;
+            url = `/comments/?sort=-${sortBy}`;
         } else {
-            url = `http://localhost:4000/api/v1/comments`;
+            url = `/comments`;
         }
 
         try {
@@ -56,7 +59,7 @@ function LandingPage(props) {
     //     try {
     //         if (userId) {
     //             const response = await ky
-    //                 .get(`http://localhost:4000/api/v1/profiles/${userId}`)
+    //                 .get(`/profiles/${userId}`)
     //                 .json();
 
     //             setProfile(response.data);

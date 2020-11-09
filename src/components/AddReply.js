@@ -42,9 +42,8 @@ export default function AddReply(props) {
         setPostBtnPressed(true);
         const sanitizedReply = sanitize(reply);
 
-        let url = `http://localhost:4000/api/v1/comments/${commentId}/replies`;
-        if (replyId)
-            url = `http://localhost:4000/api/v1/comments/${commentId}/replies/${replyId}`;
+        let url = `/comments/${commentId}/replies`;
+        if (replyId) url = `/comments/${commentId}/replies/${replyId}`;
 
         try {
             const response = await ky

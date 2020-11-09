@@ -22,7 +22,7 @@ function UserProvider(props) {
     //JSON.parse(localStorage.getItem("user"))
     // const getUser = async () => {
     //     const userData = await ky
-    //         .post("http://localhost:4000/api/v1/users/login", {
+    //         .post("/users/login", {
     //             credentials: "include",
     //             json: {
     //                 email: "tousif2@tousif.com",

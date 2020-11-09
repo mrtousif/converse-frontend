@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import SortIcon from "@material-ui/icons/Sort";
+// import SortIcon from "@material-ui/icons/Sort";
 // import { Link as RouterLink } from "react-router-dom";
 import ky from "ky";
 import UserProvider from "../contexts/UserProvider";
@@ -35,49 +35,52 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function NavBar(props) {
-    const { totalComments, sortComments } = props;
+    const {
+        totalComments,
+        //  sortComments
+    } = props;
     const classes = useStyles();
     const userCtx = useContext(UserProvider.context);
 
     const [userAnchorEl, setUserAnchorEl] = useState(null);
-    const [sortAnchorEl, setSortAnchorEl] = useState(null);
+    // const [sortAnchorEl, setSortAnchorEl] = useState(null);
 
     const handleUserClick = (event) => {
         setUserAnchorEl(event.currentTarget);
     };
 
-    const handleSortClick = (event) => {
-        setSortAnchorEl(event.currentTarget);
-    };
+    // const handleSortClick = (event) => {
+    //     setSortAnchorEl(event.currentTarget);
+    // };
 
     const handleClose = () => {
         setUserAnchorEl(null);
-        setSortAnchorEl(null);
+        // setSortAnchorEl(null);
     };
 
     const logOut = async () => {
         userCtx.logOutUser();
-        await ky.get("http://localhost:4000/api/v1/users/logout", {
+        await ky.get("/users/logout", {
             credentials: "include",
         });
     };
 
-    const getUser = async () => {
-        try {
-            let userData = await ky
-                .post("http://localhost:4000/api/v1/users/login", {
-                    credentials: "include",
-                    json: {
-                        email: "tousif@email.com",
-                        password: "password",
-                    },
-                })
-                .json();
-            localStorage.setItem("user", JSON.stringify(userData.data));
-        } catch (error) {
-            console.error(error);
-        }
-    };
+    // const getUser = async () => {
+    //     try {
+    //         let userData = await ky
+    //             .post("/users/login", {
+    //                 credentials: "include",
+    //                 json: {
+    //                     email: "tousif@email.com",
+    //                     password: "password",
+    //                 },
+    //             })
+    //             .json();
+    //         localStorage.setItem("user", JSON.stringify(userData.data));
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // };
 
     let UserButton;
     if (userCtx.token)
@@ -114,7 +117,7 @@ function NavBar(props) {
                             handleClose(event);
                         }}
                         component="a"
-                        href="http://localhost:4000/profile"
+                        href="https://converse-user-panel.vercel.app/profile"
                         target="_blank"
                     >
                         Profile
@@ -199,8 +202,7 @@ function NavBar(props) {
                         ) : (
                             <Button
                                 className={classes.btn}
-                                onClick={getUser}
-                                href="http://localhost:4000/login"
+                                href="https://converse-user-panel.vercel.app/login"
                                 target="_blank"
                             >
                                 Log in

@@ -60,16 +60,13 @@ function Reply(props) {
 
         try {
             const response = await ky
-                .patch(
-                    `http://localhost:4000/api/v1/comments/${commentId}/replies/${id}`,
-                    {
-                        credentials: "include",
-                        json: {
-                            liked: !liked,
-                            likes,
-                        },
-                    }
-                )
+                .patch(`/comments/${commentId}/replies/${id}`, {
+                    credentials: "include",
+                    json: {
+                        liked: !liked,
+                        likes,
+                    },
+                })
                 .json();
             console.log(response);
         } catch (error) {
@@ -86,12 +83,9 @@ function Reply(props) {
     const deleteReply = async () => {
         try {
             await ky
-                .delete(
-                    `http://localhost:4000/api/v1/comments/${commentId}/replies/${id}`,
-                    {
-                        credentials: "include",
-                    }
-                )
+                .delete(`/comments/${commentId}/replies/${id}`, {
+                    credentials: "include",
+                })
                 .json();
         } catch (error) {
             console.error(error);

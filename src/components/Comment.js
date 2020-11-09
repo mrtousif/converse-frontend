@@ -72,7 +72,7 @@ function Comment(props) {
 
         try {
             const response = await ky
-                .patch(`http://localhost:4000/api/v1/comments/${id}`, {
+                .patch(`/comments/${id}`, {
                     credentials: "include",
                     json: {
                         liked: !liked,
@@ -93,7 +93,7 @@ function Comment(props) {
         setDisliked(!disliked);
         try {
             await ky
-                .patch(`http://localhost:4000/api/v1/comments/${id}`, {
+                .patch(`/comments/${id}`, {
                     credentials: "include",
                     json: {
                         liked: !liked,
@@ -110,9 +110,7 @@ function Comment(props) {
         setViewReplies(!viewReplies);
         // get replies
         try {
-            const response = await ky
-                .get(`http://localhost:4000/api/v1/comments/${id}/replies`)
-                .json();
+            const response = await ky.get(`/comments/${id}/replies`).json();
 
             setAllReplies(response.data);
         } catch (error) {
@@ -122,7 +120,7 @@ function Comment(props) {
 
     const deleteComment = async () => {
         try {
-            await ky.delete(`http://localhost:4000/api/v1/comments/${id}`, {
+            await ky.delete(`/comments/${id}`, {
                 credentials: "include",
             });
             deleteFromAllComments(id);

@@ -43,7 +43,7 @@ export default function AddComment(props) {
         // const sanitizedComment = sanitize(comment);
         try {
             const response = await ky
-                .post("http://localhost:4000/api/v1/comments/", {
+                .post("/comments/", {
                     credentials: "include",
                     headers: {
                         authorization: `Bearer ${userCtx.token}`,
