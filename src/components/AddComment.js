@@ -43,8 +43,7 @@ export default function AddComment(props) {
         // const sanitizedComment = sanitize(comment);
         try {
             const response = await ky
-                .post("/comments/", {
-                    credentials: "include",
+                .post("/comments", {
                     headers: {
                         authorization: `Bearer ${userCtx.token}`,
                     },
@@ -102,7 +101,7 @@ export default function AddComment(props) {
             style={{ marginTop: "0.5rem", marginBottom: "0.5em" }}
         >
             <Grid item style={{ marginRight: "0.5em", marginTop: "0.5em" }}>
-                <Avatar />
+                <Avatar alt={userCtx.name} src={userCtx.photo} />
             </Grid>
 
             <Grid item xs>

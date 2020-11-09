@@ -48,10 +48,9 @@ export default function AddReply(props) {
         try {
             const response = await ky
                 .post(url, {
-                    credentials: "include",
-                    // headers: {
-                    //     authorization: `Bearer ${user.token}`,
-                    // },
+                    headers: {
+                        authorization: `Bearer ${userCtx.token}`,
+                    },
                     json: {
                         opinion: sanitizedReply,
                         pageUrl: document.location.origin,

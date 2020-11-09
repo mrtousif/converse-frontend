@@ -61,7 +61,9 @@ function Reply(props) {
         try {
             const response = await ky
                 .patch(`/comments/${commentId}/replies/${id}`, {
-                    credentials: "include",
+                    headers: {
+                        authorization: `Bearer ${userCtx.token}`,
+                    },
                     json: {
                         liked: !liked,
                         likes,
@@ -84,7 +86,9 @@ function Reply(props) {
         try {
             await ky
                 .delete(`/comments/${commentId}/replies/${id}`, {
-                    credentials: "include",
+                    headers: {
+                        authorization: `Bearer ${userCtx.token}`,
+                    },
                 })
                 .json();
         } catch (error) {

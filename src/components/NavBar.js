@@ -117,7 +117,7 @@ function NavBar(props) {
                             handleClose(event);
                         }}
                         component="a"
-                        href="https://converse-user-panel.vercel.app/profile"
+                        href="http://localhost:3001/profile"
                         target="_blank"
                     >
                         Profile
@@ -202,7 +202,7 @@ function NavBar(props) {
                         ) : (
                             <Button
                                 className={classes.btn}
-                                href="https://converse-user-panel.vercel.app/login"
+                                href="http://localhost:3001/login"
                                 target="_blank"
                             >
                                 Log in

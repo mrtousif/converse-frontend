@@ -94,7 +94,9 @@ function Comment(props) {
         try {
             await ky
                 .patch(`/comments/${id}`, {
-                    credentials: "include",
+                    headers: {
+                        authorization: `Bearer ${userCtx.token}`,
+                    },
                     json: {
                         liked: !liked,
                         likes,
@@ -121,7 +123,9 @@ function Comment(props) {
     const deleteComment = async () => {
         try {
             await ky.delete(`/comments/${id}`, {
-                credentials: "include",
+                headers: {
+                    authorization: `Bearer ${userCtx.token}`,
+                },
             });
             deleteFromAllComments(id);
         } catch (error) {

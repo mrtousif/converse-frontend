@@ -11,7 +11,7 @@ function CommentList(props) {
             {/* <React.StrictMode> */}
             {allComments.map((comment) => (
                 <Comment
-                    key={comment.id}
+                    key={comment._id}
                     comment={comment}
                     deleteFromAllComments={deleteFromAllComments}
                 />
