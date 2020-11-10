@@ -19,9 +19,9 @@ import ky from "ky";
 import UserProvider from "../contexts/UserProvider";
 
 const baseUrl =
-    process.env.REACT_APP_API_URL || process.env.REACT_APP_LOCALHOST;
-
-const userPanelUrl = "https://converse-user-panel.vercel.app";
+    process.env.NODE_ENV === "production"
+        ? process.env.REACT_APP_API_URL
+        : process.env.REACT_APP_LOCALHOST;
 
 const useStyles = makeStyles((theme) => ({
     btn: {
@@ -126,7 +126,7 @@ function NavBar(props) {
                             handleClose(event);
                         }}
                         component="a"
-                        href={`${userPanelUrl}/profile`}
+                        href={`${baseUrl}/profile`}
                         target="_blank"
                     >
                         Profile
@@ -211,7 +211,7 @@ function NavBar(props) {
                         ) : (
                             <Button
                                 className={classes.btn}
-                                href={`${userPanelUrl}/login`}
+                                href={`${baseUrl}/login`}
                                 target="_blank"
                             >
                                 Log in

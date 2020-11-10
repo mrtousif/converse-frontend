@@ -24,7 +24,9 @@ import UserProvider from "../contexts/UserProvider";
 //     return string.replace(reg, (match) => map[match]);
 // }
 const baseUrl =
-    process.env.REACT_APP_API_URL || process.env.REACT_APP_LOCALHOST;
+    process.env.NODE_ENV === "production"
+        ? process.env.REACT_APP_API_URL
+        : process.env.REACT_APP_LOCALHOST;
 
 export default function AddComment(props) {
     const { addToAllComments } = props;

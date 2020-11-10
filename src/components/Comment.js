@@ -19,7 +19,9 @@ import { parseISO, formatDistanceToNow } from "date-fns";
 import UserProvider from "../contexts/UserProvider";
 
 const baseUrl =
-    process.env.REACT_APP_API_URL || process.env.REACT_APP_LOCALHOST;
+    process.env.NODE_ENV === "production"
+        ? process.env.REACT_APP_API_URL
+        : process.env.REACT_APP_LOCALHOST;
 
 function Comment(props) {
     const userCtx = useContext(UserProvider.context);

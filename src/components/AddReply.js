@@ -25,7 +25,9 @@ function sanitize(string) {
 }
 
 const baseUrl =
-    process.env.REACT_APP_API_URL || process.env.REACT_APP_LOCALHOST;
+    process.env.NODE_ENV === "production"
+        ? process.env.REACT_APP_API_URL
+        : process.env.REACT_APP_LOCALHOST;
 
 export default function AddReply(props) {
     const { commentId, replyId, addToAllReplies } = props;
