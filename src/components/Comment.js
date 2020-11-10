@@ -18,6 +18,9 @@ import ky from "ky";
 import { parseISO, formatDistanceToNow } from "date-fns";
 import UserProvider from "../contexts/UserProvider";
 
+const baseUrl =
+    process.env.REACT_APP_API_URL || process.env.REACT_APP_LOCALHOST;
+
 function Comment(props) {
     const userCtx = useContext(UserProvider.context);
     const { deleteFromAllComments } = props;
@@ -72,7 +75,7 @@ function Comment(props) {
 
         try {
             const response = await ky
-                .patch(`/comments/${id}`, {
+                .patch(`${baseUrl}/comments/${id}`, {
                     credentials: "include",
                     json: {
                         liked: !liked,
@@ -93,7 +96,8 @@ function Comment(props) {
         setDisliked(!disliked);
         try {
             await ky
-                .patch(`/comments/${id}`, {
+                .patch(`${baseUrl}/comments/${id}`, {
+                    credentials: "include",
                     headers: {
                         authorization: `Bearer ${userCtx.token}`,
                     },
@@ -112,7 +116,9 @@ function Comment(props) {
         setViewReplies(!viewReplies);
         // get replies
         try {
-            const response = await ky.get(`/comments/${id}/replies`).json();
+            const response = await ky
+                .get(`${baseUrl}/comments/${id}/replies`)
+                .json();
 
             setAllReplies(response.data);
         } catch (error) {
@@ -122,7 +128,8 @@ function Comment(props) {
 
     const deleteComment = async () => {
         try {
-            await ky.delete(`/comments/${id}`, {
+            await ky.delete(`${baseUrl}/comments/${id}`, {
+                credentials: "include",
                 headers: {
                     authorization: `Bearer ${userCtx.token}`,
                 },

@@ -24,6 +24,9 @@ function sanitize(string) {
     return string.replace(reg, (match) => map[match]);
 }
 
+const baseUrl =
+    process.env.REACT_APP_API_URL || process.env.REACT_APP_LOCALHOST;
+
 export default function AddReply(props) {
     const { commentId, replyId, addToAllReplies } = props;
     //toUser,replyName
@@ -42,12 +45,14 @@ export default function AddReply(props) {
         setPostBtnPressed(true);
         const sanitizedReply = sanitize(reply);
 
-        let url = `/comments/${commentId}/replies`;
-        if (replyId) url = `/comments/${commentId}/replies/${replyId}`;
+        let url = `${baseUrl}/comments/${commentId}/replies`;
+        if (replyId)
+            url = `${baseUrl}/comments/${commentId}/replies/${replyId}`;
 
         try {
             const response = await ky
                 .post(url, {
+                    credentials: "include",
                     headers: {
                         authorization: `Bearer ${userCtx.token}`,
                     },

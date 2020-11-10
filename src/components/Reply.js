@@ -16,6 +16,9 @@ import ky from "ky";
 import { parseISO, formatDistanceToNow } from "date-fns";
 import UserProvider from "../contexts/UserProvider";
 
+const baseUrl =
+    process.env.REACT_APP_API_URL || process.env.REACT_APP_LOCALHOST;
+
 function Reply(props) {
     const {
         userName,
@@ -60,7 +63,8 @@ function Reply(props) {
 
         try {
             const response = await ky
-                .patch(`/comments/${commentId}/replies/${id}`, {
+                .patch(`${baseUrl}/comments/${commentId}/replies/${id}`, {
+                    credentials: "include",
                     headers: {
                         authorization: `Bearer ${userCtx.token}`,
                     },
@@ -85,7 +89,8 @@ function Reply(props) {
     const deleteReply = async () => {
         try {
             await ky
-                .delete(`/comments/${commentId}/replies/${id}`, {
+                .delete(`${baseUrl}/comments/${commentId}/replies/${id}`, {
+                    credentials: "include",
                     headers: {
                         authorization: `Bearer ${userCtx.token}`,
                     },

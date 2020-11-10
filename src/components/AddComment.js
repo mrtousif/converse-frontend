@@ -23,6 +23,8 @@ import UserProvider from "../contexts/UserProvider";
 //     const reg = /[&<>"'/]/gi;
 //     return string.replace(reg, (match) => map[match]);
 // }
+const baseUrl =
+    process.env.REACT_APP_API_URL || process.env.REACT_APP_LOCALHOST;
 
 export default function AddComment(props) {
     const { addToAllComments } = props;
@@ -43,7 +45,8 @@ export default function AddComment(props) {
         // const sanitizedComment = sanitize(comment);
         try {
             const response = await ky
-                .post("/comments", {
+                .post(`${baseUrl}/comments`, {
+                    credentials: "include",
                     headers: {
                         authorization: `Bearer ${userCtx.token}`,
                     },

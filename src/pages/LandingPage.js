@@ -10,6 +10,9 @@ import {
 } from "react-query";
 // import UserProvider from "../contexts/UserProvider";
 
+const baseUrl =
+    process.env.REACT_APP_API_URL || process.env.REACT_APP_LOCALHOST;
+
 function LandingPage(props) {
     const { totalComments, setTotalComments, sortBy } = props;
     const [allComments, setAllComments] = useState([]);
@@ -42,9 +45,9 @@ function LandingPage(props) {
     const getComments = async (key) => {
         let url;
         if (sortBy) {
-            url = `/comments/?sort=-${sortBy}`;
+            url = `${baseUrl}/comments/?sort=-${sortBy}`;
         } else {
-            url = `/comments`;
+            url = `${baseUrl}/comments`;
         }
 
         try {

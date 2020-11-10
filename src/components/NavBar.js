@@ -18,6 +18,11 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ky from "ky";
 import UserProvider from "../contexts/UserProvider";
 
+const baseUrl =
+    process.env.REACT_APP_API_URL || process.env.REACT_APP_LOCALHOST;
+
+const userPanelUrl = "https://converse-user-panel.vercel.app";
+
 const useStyles = makeStyles((theme) => ({
     btn: {
         textTransform: "none",
@@ -60,9 +65,13 @@ function NavBar(props) {
 
     const logOut = async () => {
         userCtx.logOutUser();
-        await ky.get("/users/logout", {
-            credentials: "include",
-        });
+        try {
+            await ky.get(`${baseUrl}/users/logout`, {
+                credentials: "include",
+            });
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     // const getUser = async () => {
@@ -117,7 +126,7 @@ function NavBar(props) {
                             handleClose(event);
                         }}
                         component="a"
-                        href="http://localhost:3001/profile"
+                        href={`${userPanelUrl}/profile`}
                         target="_blank"
                     >
                         Profile
@@ -202,7 +211,7 @@ function NavBar(props) {
                         ) : (
                             <Button
                                 className={classes.btn}
-                                href="http://localhost:3001/login"
+                                href={`${userPanelUrl}/login`}
                                 target="_blank"
                             >
                                 Log in
