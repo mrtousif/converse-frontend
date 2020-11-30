@@ -1,22 +1,31 @@
 import React from "react";
 import Comment from "./Comment";
 import { Grid } from "@material-ui/core";
-// import { comments } from './data';
+import { useQuery } from "@apollo/client";
+import { GET_COMMENTS } from "../graphql/graphql";
+import Loading from "./Loading";
+import AddComment from "./AddComment";
 
 function CommentList(props) {
-    const { allComments, deleteFromAllComments } = props;
+    const { postId } = props;
+    const { loading, error, data } = useQuery(GET_COMMENTS, {
+        update(proxy, result) {
+            console.log(result);
+        },
+    });
+
+    if (loading) return <Loading />;
+    if (error) return <p>Error :(</p>;
+    // React.useEffect(()=> {
+
+    // })
 
     return (
-        <Grid container direction="column">
-            {/* <React.StrictMode> */}
-            {allComments.map((comment) => (
-                <Comment
-                    key={comment._id}
-                    comment={comment}
-                    deleteFromAllComments={deleteFromAllComments}
-                />
+        <Grid container>
+            <AddComment postId={postId} />
+            {data.getComments.map((comment) => (
+                <Comment key={comment._id} comment={comment} />
             ))}
-            {/* </React.StrictMode> */}
         </Grid>
     );
 }

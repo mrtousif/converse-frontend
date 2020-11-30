@@ -1,33 +1,34 @@
 import React from "react";
-import Reply from "./Reply";
-import { Grid, Divider } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
+import { useQuery } from "@apollo/client";
+import { GET_REPLIES_OF_COMMENT } from "../graphql/graphql";
+import Loading from "./Loading";
 import AddReply from "./AddReply";
-// import { comments } from './data';
-// import Loading from "./Loading";
+import Reply from "./Reply";
 
 function ReplyList(props) {
-    const { commentId, allReplies, addToAllReplies } = props;
+    const { commentId } = props;
+    const { loading, error, data } = useQuery(GET_REPLIES_OF_COMMENT, {
+        variables: {
+            commentId,
+        },
+        onError(err) {
+            console.log(err);
+        },
+    });
 
-    // allReplies.map((reply) => {
-    //     const { userName, id, updatedAt, likes, userReply } = reply;
+    if (loading) return <Loading />;
+    if (error) return <p>Error :(</p>;
+    // React.useEffect(()=> {
+
     // })
 
     return (
-        <Grid container direction="column">
-            <AddReply commentId={commentId} addToAllReplies={addToAllReplies} />
-            {/* toUser={userName} */}
-            {allReplies.length > 0
-                ? allReplies.map((reply) => (
-                      <Reply
-                          key={reply.id}
-                          reply={reply}
-                          commentId={commentId}
-                          //   toUser={userName}
-                      />
-                  ))
-                : null}
-
-            <Divider />
+        <Grid container>
+            <AddReply commentId={commentId} />
+            {data.getReplies.map((reply) => (
+                <Reply key={reply._id} reply={reply} />
+            ))}
         </Grid>
     );
 }

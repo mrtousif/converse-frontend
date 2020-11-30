@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import {
-    Container,
     Paper,
     Tabs,
     Tab,
@@ -15,13 +14,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 // import SortIcon from "@material-ui/icons/Sort";
 // import { Link as RouterLink } from "react-router-dom";
-import ky from "ky";
 import UserProvider from "../contexts/UserProvider";
-
-const baseUrl =
-    process.env.NODE_ENV === "production"
-        ? process.env.REACT_APP_API_URL
-        : process.env.REACT_APP_LOCALHOST;
 
 const useStyles = makeStyles((theme) => ({
     btn: {
@@ -63,36 +56,8 @@ function NavBar(props) {
         // setSortAnchorEl(null);
     };
 
-    const logOut = async () => {
-        userCtx.logOutUser();
-        try {
-            await ky.get(`${baseUrl}/users/logout`, {
-                credentials: "include",
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    // const getUser = async () => {
-    //     try {
-    //         let userData = await ky
-    //             .post("/users/login", {
-    //                 credentials: "include",
-    //                 json: {
-    //                     email: "tousif@email.com",
-    //                     password: "password",
-    //                 },
-    //             })
-    //             .json();
-    //         localStorage.setItem("user", JSON.stringify(userData.data));
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // };
-
     let UserButton;
-    if (userCtx.token)
+    if (userCtx.user)
         UserButton = (
             <React.Fragment>
                 <Button
@@ -104,15 +69,15 @@ function NavBar(props) {
                     onClick={handleUserClick}
                 >
                     <Avatar
-                        alt={userCtx.name}
-                        src={userCtx.photo}
+                        alt={userCtx.user.name}
+                        src={userCtx.user.photo}
                         style={{
                             height: "25px",
                             width: "25px",
                             marginRight: "5px",
                         }}
                     />
-                    <Hidden xsDown>{userCtx.name.split(" ")[0]}</Hidden>
+                    <Hidden xsDown>{userCtx.user.name.split(" ")[0]}</Hidden>
                 </Button>
                 <Menu
                     id="user-menu"
@@ -126,14 +91,14 @@ function NavBar(props) {
                             handleClose(event);
                         }}
                         component="a"
-                        href={`${baseUrl}/profile`}
+                        // href={`${baseUrl}/profile`}
                         target="_blank"
                     >
                         Profile
                     </MenuItem>
                     <MenuItem
                         onClick={(e) => {
-                            logOut();
+                            userCtx.logout();
                             handleClose(e);
                             // window.open(
                             //     "http://localhost:4000/login",
@@ -149,27 +114,26 @@ function NavBar(props) {
         );
 
     return (
-        <Container maxWidth="md">
-            <Paper square>
-                <Grid container>
-                    <Grid item>
-                        <Tabs value={0}>
-                            <Tab
-                                style={{ textTransform: "none" }}
-                                label={`${totalComments} Comments`}
-                                disableRipple
-                            />
+        <Paper square>
+            <Grid container>
+                <Grid item>
+                    <Tabs value={0}>
+                        <Tab
+                            style={{ textTransform: "none" }}
+                            label={`${totalComments} Comments`}
+                            disableRipple
+                        />
 
-                            {/* <Tab
+                        {/* <Tab
                         className={classes.tab}
                         label="Community"
                         href="https://www.adilide.com/converse/privacy-policy"
                         target="_blank"
                     /> */}
-                        </Tabs>
-                    </Grid>
+                    </Tabs>
+                </Grid>
 
-                    {/* <Grid item style={{ marginLeft: "auto" }}>
+                {/* <Grid item style={{ marginLeft: "auto" }}>
                         <Button
                             aria-controls="sorting-menu"
                             aria-haspopup="true"
@@ -205,22 +169,21 @@ function NavBar(props) {
                         </Menu>
                     </Grid> */}
 
-                    <Grid item style={{ marginLeft: "auto" }}>
-                        {userCtx.token ? (
-                            UserButton
-                        ) : (
-                            <Button
-                                className={classes.btn}
-                                href={`${baseUrl}/login`}
-                                target="_blank"
-                            >
-                                Log in
-                            </Button>
-                        )}
-                    </Grid>
+                <Grid item style={{ marginLeft: "auto" }}>
+                    {userCtx.user ? (
+                        UserButton
+                    ) : (
+                        <Button
+                            className={classes.btn}
+                            href={`http://localhost:3000/login`}
+                            target="_blank"
+                        >
+                            Log in
+                        </Button>
+                    )}
                 </Grid>
-            </Paper>
-        </Container>
+            </Grid>
+        </Paper>
     );
 }
 

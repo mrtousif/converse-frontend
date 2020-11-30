@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import {
     // Container,
     Grid,
@@ -7,63 +7,62 @@ import {
     Button,
     Box,
 } from "@material-ui/core";
-import ky from "ky";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import UserProvider from "../contexts/UserProvider";
+import { useMutation } from "@apollo/client";
+import { CREATE_COMMENT, GET_COMMENTS } from "../graphql/graphql";
 
-// function sanitize(string) {
-//     const map = {
-//         "&": "&amp;",
-//         "<": "&lt;",
-//         ">": "&gt;",
-//         '"': "&quot;",
-//         "'": "&#x27;",
-//         "/": "&#x2F;",
-//     };
-//     const reg = /[&<>"'/]/gi;
-//     return string.replace(reg, (match) => map[match]);
-// }
-const baseUrl =
-    process.env.NODE_ENV === "production"
-        ? process.env.REACT_APP_API_URL
-        : process.env.REACT_APP_LOCALHOST;
-
-export default function AddComment(props) {
-    const { addToAllComments } = props;
+function AddComment(props) {
+    const { postId } = props;
     const [comment, setComment] = useState(props.comment || "");
     const [postBtnPressed, setPostBtnPressed] = useState(false);
     const [focus, setFocus] = useState(false);
     // const [postedComments, setPostedComments] = useState([]);
-    const userCtx = useContext(UserProvider.context);
+    const userCtx = React.useContext(UserProvider.context);
+
+    const [addComment, { loading }] = useMutation(CREATE_COMMENT, {
+        update(proxy, result) {
+            try {
+                const data = proxy.readQuery({
+                    query: GET_COMMENTS,
+                });
+
+                console.log(data);
+                // proxy.writeQuery({
+                //     query: GET_COMMENTS,
+                //     data: {
+                //         getComments: [result.data.createComment, ...data.getComments],
+                //     },
+                // });
+                setComment("");
+                setPostBtnPressed(false);
+            } catch (error) {
+                console.error(error);
+            }
+        },
+
+        onError(err) {
+            console.warn(err);
+            return err;
+        },
+    });
 
     const handleChange = (event, value) => {
         setComment(event.target.value);
     };
 
     const submitComment = async () => {
-        if (!userCtx.token) return;
+        if (!userCtx.user) return;
         if (!comment || comment.length < 2) return;
         setPostBtnPressed(true);
         // const sanitizedComment = sanitize(comment);
-        try {
-            const response = await ky
-                .post(`${baseUrl}/comments`, {
-                    credentials: "include",
-                    headers: {
-                        authorization: `Bearer ${userCtx.token}`,
-                    },
-                    json: {
-                        opinion: comment,
-                        pageUrl: document.location.origin,
-                    },
-                })
-                .json();
-            setComment("");
-            addToAllComments(response.data);
-        } catch (error) {
-            console.error(error);
-        }
-        setPostBtnPressed(false);
+        addComment({
+            variables: {
+                body: comment,
+                postId,
+            },
+        });
+        setComment("");
     };
 
     const onCancel = () => {
@@ -82,7 +81,7 @@ export default function AddComment(props) {
                 }}
                 disabled={postBtnPressed}
             >
-                Post
+                Submit
             </Button>
 
             <Button
@@ -100,17 +99,16 @@ export default function AddComment(props) {
     );
 
     return (
-        <Grid
-            container
-            spacing={1}
-            style={{ marginTop: "0.5rem", marginBottom: "0.5em" }}
-        >
+        <Grid container spacing={1} style={{ marginTop: "0.5rem", marginBottom: "1em" }}>
             <Grid item style={{ marginRight: "0.5em", marginTop: "0.5em" }}>
-                <Avatar alt={userCtx.name} src={userCtx.photo} />
+                <Avatar
+                    alt={userCtx.user && userCtx.user.name ? userCtx.user.name : ""}
+                    src={userCtx.user && userCtx.user.photo ? userCtx.user.photo : ""}
+                />
             </Grid>
 
             <Grid item xs>
-                {postBtnPressed ? (
+                {loading ? (
                     <div
                         style={{
                             position: "absolute",
@@ -125,9 +123,7 @@ export default function AddComment(props) {
                 <TextField
                     id="add-comment"
                     placeholder={
-                        userCtx.token
-                            ? "Add a comment"
-                            : "Log in to post a comment"
+                        userCtx.user ? "Add a comment" : "Log in to post a comment"
                     }
                     value={comment}
                     fullWidth
@@ -144,3 +140,5 @@ export default function AddComment(props) {
         </Grid>
     );
 }
+
+export default AddComment;

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import {
     // Container,
     Grid,
@@ -7,73 +7,66 @@ import {
     Button,
     Box,
 } from "@material-ui/core";
-import ky from "ky";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import UserProvider from "../contexts/UserProvider";
+import { useMutation } from "@apollo/client";
+import { CREATE_REPLY, GET_REPLIES_OF_COMMENT } from "../graphql/graphql";
 
-function sanitize(string) {
-    const map = {
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#x27;",
-        "/": "&#x2F;",
-    };
-    const reg = /[&<>"'/]/gi;
-    return string.replace(reg, (match) => map[match]);
-}
-
-const baseUrl =
-    process.env.NODE_ENV === "production"
-        ? process.env.REACT_APP_API_URL
-        : process.env.REACT_APP_LOCALHOST;
-
-export default function AddReply(props) {
-    const { commentId, replyId, addToAllReplies } = props;
-    //toUser,replyName
-    const [reply, setReply] = useState("");
+function AddReply(props) {
+    const { commentId } = props;
+    const [comment, setComment] = useState(props.comment || "");
     const [postBtnPressed, setPostBtnPressed] = useState(false);
     const [focus, setFocus] = useState(false);
-    const userCtx = useContext(UserProvider.context);
+    // const [postedComments, setPostedComments] = useState([]);
+    const userCtx = React.useContext(UserProvider.context);
+
+    const [addComment, { loading }] = useMutation(CREATE_REPLY, {
+        update(proxy, result) {
+            try {
+                const data = proxy.readQuery({
+                    query: GET_REPLIES_OF_COMMENT,
+                });
+
+                console.log(data);
+                // proxy.writeQuery({
+                //     query: GET_REPLY_OF_COMMENTS,
+                //     data: {
+                //         getComments: [result.data.createComment, ...data.getComments],
+                //     },
+                // });
+                setComment("");
+                setPostBtnPressed(false);
+            } catch (error) {
+                console.error(error);
+            }
+        },
+
+        onError(err) {
+            console.warn(err);
+            return err;
+        },
+    });
 
     const handleChange = (event, value) => {
-        setReply(event.target.value);
+        setComment(event.target.value);
     };
 
-    const submitReply = async () => {
-        if (!userCtx.token) return;
-        if (!reply || reply.length < 2) return;
+    const submitComment = async () => {
+        if (!userCtx.user) return;
+        if (!comment || comment.length < 2) return;
         setPostBtnPressed(true);
-        const sanitizedReply = sanitize(reply);
-
-        let url = `${baseUrl}/comments/${commentId}/replies`;
-        if (replyId)
-            url = `${baseUrl}/comments/${commentId}/replies/${replyId}`;
-
-        try {
-            const response = await ky
-                .post(url, {
-                    credentials: "include",
-                    headers: {
-                        authorization: `Bearer ${userCtx.token}`,
-                    },
-                    json: {
-                        opinion: sanitizedReply,
-                        pageUrl: document.location.origin,
-                    },
-                })
-                .json();
-            setReply("");
-            addToAllReplies(response.data);
-        } catch (error) {
-            console.error(error);
-        }
-        setPostBtnPressed(false);
+        // const sanitizedComment = sanitize(comment);
+        addComment({
+            variables: {
+                body: comment,
+                commentId,
+            },
+        });
+        setComment("");
     };
 
     const onCancel = () => {
-        setReply("");
+        setComment("");
     };
 
     const buttonComponent = (
@@ -83,12 +76,12 @@ export default function AddReply(props) {
                 color="primary"
                 style={{ marginRight: "10px" }}
                 onClick={() => {
-                    submitReply();
+                    submitComment();
                     setFocus(false);
                 }}
                 disabled={postBtnPressed}
             >
-                Post
+                Submit
             </Button>
 
             <Button
@@ -112,11 +105,14 @@ export default function AddReply(props) {
             style={{ marginTop: "0.5rem", marginBottom: "0.5em" }}
         >
             <Grid item style={{ marginRight: "0.5em", marginTop: "0.5em" }}>
-                <Avatar />
+                <Avatar
+                    alt={userCtx.user && userCtx.user.name ? userCtx.user.name : ""}
+                    src={userCtx.user && userCtx.user.photo ? userCtx.user.photo : ""}
+                />
             </Grid>
 
             <Grid item xs>
-                {postBtnPressed ? (
+                {loading ? (
                     <div
                         style={{
                             position: "absolute",
@@ -129,11 +125,9 @@ export default function AddReply(props) {
                 ) : null}
 
                 <TextField
-                    id="add-Reply"
-                    placeholder={
-                        userCtx.token ? "Add a Reply" : "Log in to add a reply"
-                    }
-                    value={reply}
+                    id="add-comment"
+                    placeholder={userCtx.user ? "Add a reply" : "Log in to add a reply"}
+                    value={comment}
                     fullWidth
                     variant="outlined"
                     multiline
@@ -148,3 +142,5 @@ export default function AddReply(props) {
         </Grid>
     );
 }
+
+export default AddReply;

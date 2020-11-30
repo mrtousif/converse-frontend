@@ -6,46 +6,36 @@ import {
     Avatar,
     Menu,
     MenuItem,
-    // useMediaQuery,
+    Grow,
 } from "@material-ui/core";
 // import { useTheme } from "@material-ui/core/styles";
-import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import ky from "ky";
+// import ReplyList from "./ReplyList";
 import { parseISO, formatDistanceToNow } from "date-fns";
 import UserProvider from "../contexts/UserProvider";
-
-const baseUrl =
-    process.env.NODE_ENV === "production"
-        ? process.env.REACT_APP_API_URL
-        : process.env.REACT_APP_LOCALHOST;
+import LikeButton from "./LikeButton";
 
 function Reply(props) {
-    const {
-        userName,
-        id,
-        userPhoto,
-        userId,
-        commentId,
-        opinion,
-        updatedAt,
-        likes,
-        // replyName,
-    } = props.reply;
-    // const { toUser } = props;
+    const userCtx = useContext(UserProvider.context);
+    const { deleteFromAllComments } = props;
 
-    const commentDate = formatDistanceToNow(parseISO(updatedAt), {
-        addSuffix: true,
-    });
+    const { user, _id, body, createdAt, likes } = props.reply;
 
-    // const [viewDelete, setViewDelete] = useState(false);
+    let commentDate = "";
+    if (createdAt) {
+        commentDate = formatDistanceToNow(parseISO(createdAt), {
+            addSuffix: true,
+        });
+    }
+
     const [liked, setLiked] = useState(false);
     const [disliked, setDisliked] = useState(false);
     const [numberOfLikes, setNumberOfLikes] = useState(likes || 0);
+    // const [allReplies, setAllReplies] = useState([]);
+    // const [viewReplies, setViewReplies] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
-    const userCtx = useContext(UserProvider.context);
     // const theme = useTheme();
     // const matchesXS = useMediaQuery(theme.breakpoints.down("xs"));
 
@@ -57,135 +47,101 @@ function Reply(props) {
         setAnchorEl(null);
     };
 
+    // const addToAllReplies = (data) => {
+    //     const temp = [...allReplies];
+    //     temp.unshift(data);
+    //     setAllReplies(temp);
+    // };
+
     const handleLike = async (event) => {
-        if (!userCtx.token) return;
+        if (!userCtx.user) return;
         setDisliked(false);
         setLiked(!liked);
         setNumberOfLikes(!liked ? numberOfLikes + 1 : numberOfLikes - 1);
 
         try {
-            const response = await ky
-                .patch(`${baseUrl}/comments/${commentId}/replies/${id}`, {
-                    credentials: "include",
-                    headers: {
-                        authorization: `Bearer ${userCtx.token}`,
-                    },
-                    json: {
-                        liked: !liked,
-                        likes,
-                    },
-                })
-                .json();
-            console.log(response);
+            // const response = await ky
+            //     .patch(`${baseUrl}/comments/${id}`, {
+            //         credentials: "include",
+            //         json: {
+            //             liked: !liked,
+            //             likes,
+            //         },
+            //     })
+            //     .json();
+            // setAllReplies(response.data);
         } catch (error) {
             console.error(error);
         }
     };
 
     const handleDislike = async () => {
-        if (userCtx) return;
+        if (!userCtx.user) return;
+        if (liked) setNumberOfLikes(numberOfLikes - 1);
         setLiked(false);
         setDisliked(!disliked);
-    };
-
-    const deleteReply = async () => {
         try {
-            await ky
-                .delete(`${baseUrl}/comments/${commentId}/replies/${id}`, {
-                    credentials: "include",
-                    headers: {
-                        authorization: `Bearer ${userCtx.token}`,
-                    },
-                })
-                .json();
+            // await ky
+            //     .patch(`${baseUrl}/comments/${id}`, {
+            //         credentials: "include",
+            //         headers: {
+            //             authorization: `Bearer ${userCtx.user}`,
+            //         },
+            //         json: {
+            //             liked: !liked,
+            //             likes,
+            //         },
+            //     })
+            //     .json();
         } catch (error) {
             console.error(error);
         }
     };
 
-    const DeleteMenu = (
-        <Grid item style={{ marginLeft: "auto" }}>
-            <IconButton
-                aria-label="more"
-                aria-controls="long-menu"
-                aria-haspopup="true"
-                onClick={handleClick}
-                style={{ fontSize: "1.2em" }}
-            >
-                <MoreVertIcon fontSize="inherit" />
-            </IconButton>
-            <Menu
-                id="long-menu"
-                anchorEl={anchorEl}
-                keepMounted
-                open={open}
-                onClose={handleClose}
-            >
-                <MenuItem
-                    onClick={(e) => {
-                        handleClose(e);
-                        deleteReply();
-                    }}
-                >
-                    Delete
-                </MenuItem>
-            </Menu>
-        </Grid>
-    );
+    const deleteComment = async () => {
+        try {
+            // await ky.delete(`${baseUrl}/comments/${id}`, {
+            //     credentials: "include",
+            //     headers: {
+            //         authorization: `Bearer ${userCtx.user}`,
+            //     },
+            // });
+            deleteFromAllComments(_id);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const reportComment = async () => {};
 
     return (
-        <React.Fragment>
+        <Grow in={true}>
             <Grid item container spacing={1} style={{ marginBottom: "0.5em" }}>
                 <Grid item style={{ marginRight: "0.5em", marginTop: "0.5em" }}>
-                    <Avatar alt={userName} src={userPhoto} />
+                    <Avatar alt={user.name} src={user.photo} />
                 </Grid>
                 <Grid item container xs>
                     <Grid item container>
                         <Grid item>
-                            <Typography variant="subtitle2">
-                                {userName}
-                            </Typography>
+                            <Typography variant="subtitle2">{user.name}</Typography>
                         </Grid>
-                        <Grid
-                            item
-                            style={{
-                                marginLeft: "0.5em",
-                                marginRight: "0.5em",
-                            }}
-                        >
-                            <Typography variant="caption">
-                                {" "}
-                                {commentDate}{" "}
-                            </Typography>
+                        <Grid item style={{ marginLeft: "0.5em", marginRight: "0.5em" }}>
+                            <Typography variant="caption">{commentDate}</Typography>
                         </Grid>
-                        {/* <Grid item>
-                            <Typography
-                                variant="caption"
-                                style={{ fontWeight: 700 }}
-                            >
-                                {" "}
-                                to {replyName || toUser}
-                            </Typography>
-                        </Grid> */}
                     </Grid>
                     <Grid item container>
                         <Grid item xs={12}>
                             <Typography variant="body2" color="initial">
-                                {opinion}
+                                {body}
                             </Typography>
                         </Grid>
+
                         <Grid item>
-                            <Typography variant="overline">
-                                {numberOfLikes}
-                            </Typography>
-                            <IconButton
-                                aria-label="like"
-                                color={liked ? "primary" : undefined}
-                                onClick={handleLike}
-                                style={{ fontSize: "1.2em" }}
-                            >
-                                <ThumbUpIcon fontSize="inherit" />
-                            </IconButton>
+                            <LikeButton
+                                handleLike={handleLike}
+                                liked={liked}
+                                numberOfLikes={numberOfLikes}
+                            />
                         </Grid>
 
                         <Grid item>
@@ -199,11 +155,85 @@ function Reply(props) {
                             </IconButton>
                         </Grid>
 
-                        {userCtx._id === userId ? DeleteMenu : null}
+                        {/* <Grid item>
+                        <Typography variant="overline">
+                            {replies * 1 > 0 ? replies : "  "}
+                        </Typography>
+                        <IconButton
+                            aria-label="reply"
+                            onClick={getReplies}
+                            style={{ fontSize: "1.2em" }}
+                        >
+                            <ReplyIcon fontSize="inherit" />
+                        </IconButton>
+                    </Grid> */}
+
+                        <Grid item style={{ marginLeft: "auto" }}>
+                            {userCtx.user ? (
+                                <IconButton
+                                    aria-label="more"
+                                    aria-controls="long-menu"
+                                    aria-haspopup="true"
+                                    onClick={handleClick}
+                                    style={{ fontSize: "1.2em" }}
+                                >
+                                    <MoreVertIcon fontSize="inherit" />
+                                </IconButton>
+                            ) : null}
+                        </Grid>
                     </Grid>
                 </Grid>
+
+                <Menu
+                    id="long-menu"
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={open}
+                    onClose={handleClose}
+                    // PaperProps={{
+                    //     style: {
+                    //         maxHeight: ITEM_HEIGHT * 4.5,
+                    //         width: '12ch',
+                    //     },
+                    // }}
+                >
+                    {userCtx.user && userCtx.user._id === user._id ? (
+                        <MenuItem
+                            onClick={(e) => {
+                                handleClose(e);
+                                deleteComment();
+                            }}
+                        >
+                            Delete
+                        </MenuItem>
+                    ) : (
+                        <MenuItem
+                            onClick={(e) => {
+                                handleClose(e);
+                                reportComment();
+                            }}
+                        >
+                            Report
+                        </MenuItem>
+                    )}
+                </Menu>
+
+                {/* <Grid
+                item
+                container
+                style={{ marginLeft: matchesXS ? "2em" : "4em" }}
+            >
+                {viewReplies ? (
+                    <ReplyList
+                        allReplies={allReplies}
+                        addToAllReplies={addToAllReplies}
+                        commentId={id}
+                        userName={userName}
+                    />
+                ) : null}
+            </Grid> */}
             </Grid>
-        </React.Fragment>
+        </Grow>
     );
 }
 

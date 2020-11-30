@@ -1,44 +1,73 @@
 import React from "react";
-import { useStorageState } from "react-storage-hooks";
-// import ky from "ky";
+// import { useStorageState } from "react-storage-hooks";
+import jwtDecode from "jwt-decode";
 
-const UserContext = React.createContext(null);
+const initialState = { user: null };
+
+const UserContext = React.createContext({
+    user: null,
+    login: (userData) => {},
+    logout: () => {},
+});
+
+const token = localStorage.getItem("token");
+if (token && token.length > 10) {
+    const decodedToken = jwtDecode(token);
+    if (decodedToken.exp * 1000 < Date.now()) {
+        localStorage.removeItem("token");
+    } else {
+        initialState.user = decodedToken;
+        initialState.user.token = token;
+    }
+}
+
+function authReducer(state, action) {
+    switch (action.type) {
+        case "LOGIN":
+            return {
+                ...state,
+                user: action.payload,
+            };
+        case "LOGOUT":
+            return {
+                ...state,
+                user: null,
+            };
+
+        default:
+            return state;
+    }
+}
 
 function UserProvider(props) {
-    const [user, setUser, writeError] = useStorageState(
-        localStorage,
-        "user",
-        {}
-    );
+    const [state, dispatch] = React.useReducer(authReducer, initialState);
+    // const [token, setToken, writeError] = useStorageState(
+    //     localStorage,
+    //     "token",
+    //     ""
+    // );
 
-    if (writeError) {
-        console.log(writeError);
-    }
+    // if (writeError) {
+    //     console.log(writeError);
+    // }
 
-    const logOutUser = () => {
-        setUser({});
+    const login = (userData) => {
+        dispatch({
+            type: "LOGIN",
+            payload: userData,
+        });
+        localStorage.setItem("token", userData.token);
+        // setToken(userData.token)
     };
 
-    //JSON.parse(localStorage.getItem("user"))
-    // const getUser = async () => {
-    //     const userData = await ky
-    //         .post("/users/login", {
-    //             credentials: "include",
-    //             json: {
-    //                 email: "tousif2@tousif.com",
-    //                 password: "password",
-    //             },
-    //         })
-    //         .json();
-
-    //     setUser(userData);
-    //     //localStorage.setItem("user", JSON.stringify(userData));
-    // };
+    const logout = () => {
+        dispatch({ type: "LOGOUT" });
+        localStorage.removeItem("token");
+        // setToken("")
+    };
 
     return (
-        <UserContext.Provider
-            value={{ ...user.user, token: user.token, logOutUser }}
-        >
+        <UserContext.Provider value={{ user: state.user, login, logout }}>
             {props.children}
         </UserContext.Provider>
     );
