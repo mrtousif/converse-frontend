@@ -66,7 +66,7 @@ export default function SignUp(props) {
     //     }
     // });
 
-    const onSubmit = handleSubmit(async (data) => {
+    const onSubmit = handleSubmit((data) => {
         const { name, email, password } = data;
         addUser({
             variables: {

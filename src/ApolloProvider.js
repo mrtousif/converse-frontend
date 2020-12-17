@@ -1,3 +1,4 @@
+import React from "react";
 import {
     ApolloClient,
     InMemoryCache,
@@ -13,9 +14,11 @@ const httpLink = createHttpLink({
 
 const authLink = setContext(() => {
     const token = localStorage.getItem("token");
+    if (token.length < 15) return;
+
     return {
         headers: {
-            authorization: token ? `Bearer ${token}` : "",
+            authorization: token ? `Bearer ${token}` : undefined,
         },
     };
 });

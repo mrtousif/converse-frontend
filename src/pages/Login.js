@@ -58,7 +58,7 @@ export default function Login(props) {
         },
     });
 
-    const onSubmit = handleSubmit(async (data) => {
+    const onSubmit = handleSubmit((data) => {
         const { email, password } = data;
         loginUser({
             variables: {
@@ -66,8 +66,6 @@ export default function Login(props) {
                 password,
             },
         });
-
-        // userCtx.logInUser(response.data);
     });
 
     if (loading) return <Loading />;

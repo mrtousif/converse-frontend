@@ -1,14 +1,14 @@
 import React from "react";
-import { Grid } from "@material-ui/core";
+import { Divider, Grid } from "@material-ui/core";
 import { useQuery } from "@apollo/client";
-import { GET_REPLIES_OF_COMMENT } from "../graphql/graphql";
+import { GET_REPLIES } from "../graphql/graphql";
 import Loading from "./Loading";
 import AddReply from "./AddReply";
 import Reply from "./Reply";
 
 function ReplyList(props) {
     const { commentId } = props;
-    const { loading, error, data } = useQuery(GET_REPLIES_OF_COMMENT, {
+    const { loading, error, data } = useQuery(GET_REPLIES, {
         variables: {
             commentId,
         },
@@ -24,7 +24,7 @@ function ReplyList(props) {
     // })
 
     return (
-        <Grid container>
+        <Grid container style={{ paddingLeft: "3em" }}>
             <AddReply commentId={commentId} />
             {data.getReplies.map((reply) => (
                 <Reply key={reply._id} reply={reply} />

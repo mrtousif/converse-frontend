@@ -4,27 +4,29 @@ import { Grid } from "@material-ui/core";
 import { useQuery } from "@apollo/client";
 import { GET_COMMENTS } from "../graphql/graphql";
 import Loading from "./Loading";
-import AddComment from "./AddComment";
+// import AddComment from "./AddComment";
+// import UserProvider from "../contexts/UserProvider";
 
 function CommentList(props) {
     const { postId } = props;
+
+    // console.log(likedComments);
+    //: "5fb3dc259f33b144981e2d4f"
     const { loading, error, data } = useQuery(GET_COMMENTS, {
-        update(proxy, result) {
-            console.log(result);
+        variables: {
+            postId,
         },
     });
 
     if (loading) return <Loading />;
     if (error) return <p>Error :(</p>;
-    // React.useEffect(()=> {
 
-    // })
+    // let result;
 
     return (
-        <Grid container>
-            <AddComment postId={postId} />
+        <Grid container direction="column" spacing={1} style={{ paddingRight: "0.4em" }}>
             {data.getComments.map((comment) => (
-                <Comment key={comment._id} comment={comment} />
+                <Comment key={comment._id} comment={comment} postId={postId} />
             ))}
         </Grid>
     );

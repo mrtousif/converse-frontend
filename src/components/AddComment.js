@@ -2,21 +2,17 @@ import React, { useState } from "react";
 import {
     // Container,
     Grid,
-    TextField,
-    Avatar,
-    Button,
-    Box,
 } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import UserProvider from "../contexts/UserProvider";
 import { useMutation } from "@apollo/client";
 import { CREATE_COMMENT, GET_COMMENTS } from "../graphql/graphql";
+import AddOpinion from "./AddOpinion";
 
 function AddComment(props) {
-    const { postId } = props;
-    const [comment, setComment] = useState(props.comment || "");
+    const { postId, pageUrl } = props;
+    const [comment, setComment] = useState("");
     const [postBtnPressed, setPostBtnPressed] = useState(false);
-    const [focus, setFocus] = useState(false);
     // const [postedComments, setPostedComments] = useState([]);
     const userCtx = React.useContext(UserProvider.context);
 
@@ -25,16 +21,18 @@ function AddComment(props) {
             try {
                 const data = proxy.readQuery({
                     query: GET_COMMENTS,
+                    variables: { postId },
                 });
 
                 console.log(data);
-                // proxy.writeQuery({
-                //     query: GET_COMMENTS,
-                //     data: {
-                //         getComments: [result.data.createComment, ...data.getComments],
-                //     },
-                // });
-                setComment("");
+                proxy.writeQuery({
+                    query: GET_COMMENTS,
+                    variables: { postId },
+                    data: {
+                        getComments: [result.data.createComment, ...data.getComments],
+                    },
+                });
+                setComment;
                 setPostBtnPressed(false);
             } catch (error) {
                 console.error(error);
@@ -47,96 +45,28 @@ function AddComment(props) {
         },
     });
 
-    const handleChange = (event, value) => {
-        setComment(event.target.value);
-    };
-
-    const submitComment = async () => {
+    const submitComment = () => {
         if (!userCtx.user) return;
-        if (!comment || comment.length < 2) return;
-        setPostBtnPressed(true);
         // const sanitizedComment = sanitize(comment);
         addComment({
             variables: {
                 body: comment,
                 postId,
+                pageUrl,
             },
         });
-        setComment("");
     };
-
-    const onCancel = () => {
-        setComment("");
-    };
-
-    const buttonComponent = (
-        <Box marginY={1}>
-            <Button
-                variant="outlined"
-                color="primary"
-                style={{ marginRight: "10px" }}
-                onClick={() => {
-                    submitComment();
-                    setFocus(false);
-                }}
-                disabled={postBtnPressed}
-            >
-                Submit
-            </Button>
-
-            <Button
-                variant="outlined"
-                color="default"
-                onClick={() => {
-                    onCancel();
-                    setFocus(false);
-                }}
-                disabled={postBtnPressed}
-            >
-                Cancel
-            </Button>
-        </Box>
-    );
 
     return (
-        <Grid container spacing={1} style={{ marginTop: "0.5rem", marginBottom: "1em" }}>
-            <Grid item style={{ marginRight: "0.5em", marginTop: "0.5em" }}>
-                <Avatar
-                    alt={userCtx.user && userCtx.user.name ? userCtx.user.name : ""}
-                    src={userCtx.user && userCtx.user.photo ? userCtx.user.photo : ""}
-                />
-            </Grid>
-
-            <Grid item xs>
-                {loading ? (
-                    <div
-                        style={{
-                            position: "absolute",
-                            marginLeft: "1em",
-                            marginTop: "0.5em",
-                        }}
-                    >
-                        <CircularProgress />
-                    </div>
-                ) : null}
-
-                <TextField
-                    id="add-comment"
-                    placeholder={
-                        userCtx.user ? "Add a comment" : "Log in to post a comment"
-                    }
-                    value={comment}
-                    fullWidth
-                    variant="outlined"
-                    multiline
-                    onChange={handleChange}
-                    onFocus={() => setFocus(true)}
-                    disabled={postBtnPressed}
-                />
-
-                {focus ? buttonComponent : null}
-                {/* userLoggedIn ? buttonComponent : null */}
-            </Grid>
+        <Grid container>
+            <AddOpinion
+                opinion={comment}
+                setOpinion={setComment}
+                submitOpinion={submitComment}
+                loading={loading}
+                postBtnPressed={postBtnPressed}
+                setPostBtnPressed={setPostBtnPressed}
+            />
         </Grid>
     );
 }

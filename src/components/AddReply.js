@@ -2,39 +2,42 @@ import React, { useState } from "react";
 import {
     // Container,
     Grid,
-    TextField,
-    Avatar,
-    Button,
-    Box,
 } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import UserProvider from "../contexts/UserProvider";
+import AddOpinion from "./AddOpinion";
 import { useMutation } from "@apollo/client";
-import { CREATE_REPLY, GET_REPLIES_OF_COMMENT } from "../graphql/graphql";
+import { CREATE_REPLY, GET_REPLIES } from "../graphql/graphql";
 
 function AddReply(props) {
     const { commentId } = props;
-    const [comment, setComment] = useState(props.comment || "");
+    const [reply, setReply] = useState("");
     const [postBtnPressed, setPostBtnPressed] = useState(false);
-    const [focus, setFocus] = useState(false);
     // const [postedComments, setPostedComments] = useState([]);
     const userCtx = React.useContext(UserProvider.context);
 
-    const [addComment, { loading }] = useMutation(CREATE_REPLY, {
+    const [addReply, { loading }] = useMutation(CREATE_REPLY, {
         update(proxy, result) {
             try {
                 const data = proxy.readQuery({
-                    query: GET_REPLIES_OF_COMMENT,
+                    query: GET_REPLIES,
+                    variables: {
+                        commentId,
+                    },
                 });
 
-                console.log(data);
-                // proxy.writeQuery({
-                //     query: GET_REPLY_OF_COMMENTS,
-                //     data: {
-                //         getComments: [result.data.createComment, ...data.getComments],
-                //     },
-                // });
-                setComment("");
+                // console.log(data);
+                // console.log(result);
+                proxy.writeQuery({
+                    query: GET_REPLIES,
+                    variables: {
+                        commentId,
+                    },
+                    data: {
+                        getReplies: [result.data.createReply, ...data.getReplies],
+                    },
+                });
+                setReply("");
                 setPostBtnPressed(false);
             } catch (error) {
                 console.error(error);
@@ -47,98 +50,27 @@ function AddReply(props) {
         },
     });
 
-    const handleChange = (event, value) => {
-        setComment(event.target.value);
-    };
-
-    const submitComment = async () => {
+    const submitReply = () => {
         if (!userCtx.user) return;
-        if (!comment || comment.length < 2) return;
-        setPostBtnPressed(true);
         // const sanitizedComment = sanitize(comment);
-        addComment({
+        addReply({
             variables: {
-                body: comment,
+                body: reply,
                 commentId,
             },
         });
-        setComment("");
     };
-
-    const onCancel = () => {
-        setComment("");
-    };
-
-    const buttonComponent = (
-        <Box marginY={1}>
-            <Button
-                variant="outlined"
-                color="primary"
-                style={{ marginRight: "10px" }}
-                onClick={() => {
-                    submitComment();
-                    setFocus(false);
-                }}
-                disabled={postBtnPressed}
-            >
-                Submit
-            </Button>
-
-            <Button
-                variant="outlined"
-                color="default"
-                onClick={() => {
-                    onCancel();
-                    setFocus(false);
-                }}
-                disabled={postBtnPressed}
-            >
-                Cancel
-            </Button>
-        </Box>
-    );
 
     return (
-        <Grid
-            container
-            spacing={1}
-            style={{ marginTop: "0.5rem", marginBottom: "0.5em" }}
-        >
-            <Grid item style={{ marginRight: "0.5em", marginTop: "0.5em" }}>
-                <Avatar
-                    alt={userCtx.user && userCtx.user.name ? userCtx.user.name : ""}
-                    src={userCtx.user && userCtx.user.photo ? userCtx.user.photo : ""}
-                />
-            </Grid>
-
-            <Grid item xs>
-                {loading ? (
-                    <div
-                        style={{
-                            position: "absolute",
-                            marginLeft: "1em",
-                            marginTop: "0.5em",
-                        }}
-                    >
-                        <CircularProgress />
-                    </div>
-                ) : null}
-
-                <TextField
-                    id="add-comment"
-                    placeholder={userCtx.user ? "Add a reply" : "Log in to add a reply"}
-                    value={comment}
-                    fullWidth
-                    variant="outlined"
-                    multiline
-                    onChange={handleChange}
-                    onFocus={() => setFocus(true)}
-                    disabled={postBtnPressed}
-                />
-
-                {focus ? buttonComponent : null}
-                {/* userLoggedIn ? buttonComponent : null */}
-            </Grid>
+        <Grid container>
+            <AddOpinion
+                opinion={reply}
+                setOpinion={setReply}
+                submitOpinion={submitReply}
+                loading={loading}
+                postBtnPressed={postBtnPressed}
+                setPostBtnPressed={setPostBtnPressed}
+            />
         </Grid>
     );
 }

@@ -30,6 +30,14 @@ const useStyles = makeStyles((theme) => ({
             paddingRight: "0.7rem",
         },
     },
+    paper: {
+        backgroundColor: "transparent",
+        // color: theme.palette.getContrastText(theme.palette.background.default),
+        // backgroundColor: theme.palette.background.default,
+    },
+    menu: {
+        // backgroundColor: "initial",
+    },
 }));
 
 function NavBar(props) {
@@ -85,6 +93,7 @@ function NavBar(props) {
                     keepMounted
                     open={Boolean(userAnchorEl)}
                     onClose={handleClose}
+                    classes={{ paper: classes.menu }}
                 >
                     <MenuItem
                         onClick={(event) => {
@@ -114,13 +123,13 @@ function NavBar(props) {
         );
 
     return (
-        <Paper square>
+        <Paper square className={classes.paper}>
             <Grid container>
                 <Grid item>
                     <Tabs value={0}>
                         <Tab
                             style={{ textTransform: "none" }}
-                            label={`${totalComments} Comments`}
+                            label={`${totalComments || 0} Comments`}
                             disableRipple
                         />
 
@@ -175,7 +184,7 @@ function NavBar(props) {
                     ) : (
                         <Button
                             className={classes.btn}
-                            href={`http://localhost:3000/login`}
+                            href={`http://localhost:1234/login`}
                             target="_blank"
                         >
                             Log in

@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
-export const GET_COMMENTS = gql`
-    query getComments {
-        getComments {
+export const CREATE_COMMENT = gql`
+    mutation createComment($postId: ID!, $body: String!, $pageUrl: String!) {
+        createComment(postId: $postId, body: $body, pageUrl: $pageUrl) {
             _id
             body
             likes
@@ -13,16 +13,47 @@ export const GET_COMMENTS = gql`
                 photo
             }
             createdAt
+            userLiked
         }
     }
 `;
 
-export const GET_LIKED_POSTS = gql`
-    query getLikedPosts($userId: ID!) {
-        getLikedPosts(userId: $userId) {
-            postId
-            userId
+export const GET_COMMENTS = gql`
+    query getComments($postId: ID!) {
+        getComments(postId: $postId) {
+            _id
+            body
+            likes
+            replies
+            user {
+                _id
+                name
+                photo
+            }
+            createdAt
+            userLiked
         }
+    }
+`;
+
+export const LIKE_COMMENT = gql`
+    mutation likeComment($commentId: ID!, $postId: ID!) {
+        likeComment(commentId: $commentId, postId: $postId) {
+            _id
+            likes
+        }
+    }
+`;
+
+export const DELETE_COMMENT = gql`
+    mutation deleteComment($commentId: ID!) {
+        deleteComment(commentId: $commentId)
+    }
+`;
+
+export const CREATE_POST = gql`
+    mutation createPost($postId: ID!, $pageUrl: String!, $title: String) {
+        createPost(postId: $postId, pageUrl: $pageUrl, title: $title)
     }
 `;
 
@@ -34,7 +65,23 @@ export const UPDATE_POST = gql`
     }
 `;
 
-export const GET_REPLIES_OF_COMMENT = gql`
+export const CREATE_REPLY = gql`
+    mutation createReply($commentId: ID!, $body: String!) {
+        createReply(commentId: $commentId, body: $body) {
+            _id
+            body
+            likes
+            user {
+                _id
+                name
+                photo
+            }
+            createdAt
+        }
+    }
+`;
+
+export const GET_REPLIES = gql`
     query getReplies($commentId: ID!) {
         getReplies(commentId: $commentId) {
             _id
@@ -50,42 +97,11 @@ export const GET_REPLIES_OF_COMMENT = gql`
     }
 `;
 
-export const CREATE_COMMENT = gql`
-    mutation createComment($postId: ID!, $body: String!) {
-        createComment(postId: $postId, body: $body) {
+export const LIKE_REPLY = gql`
+    mutation likeReply($replyId: ID!) {
+        likeReply(replyId: $replyId) {
             _id
-            body
-            user
-            createdAt
-        }
-    }
-`;
-
-export const LIKE_COMMENT = gql`
-    mutation likeComment($commentId: ID!) {
-        likeComment(commentId: $commentId)
-    }
-`;
-
-export const DELETE_COMMENT = gql`
-    mutation deleteComment($commentId: ID!) {
-        deleteComment(commentId: $commentId)
-    }
-`;
-
-export const CREATE_REPLY = gql`
-    mutation createPost($body: String!) {
-        createPost(body: $body) {
-            _id
-            body
             likes
-            comments
-            user {
-                _id
-                name
-                photo
-            }
-            createdAt
         }
     }
 `;
@@ -93,17 +109,6 @@ export const CREATE_REPLY = gql`
 export const DELETE_REPLY = gql`
     mutation deletePost($postId: ID!) {
         deletePost(postId: $postId)
-    }
-`;
-
-export const LIKE_REPLY = gql`
-    mutation likePost($postId: ID!) {
-        likePost(postId: $postId) {
-            _id
-            body
-            likes
-            createdAt
-        }
     }
 `;
 

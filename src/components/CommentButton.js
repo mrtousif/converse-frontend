@@ -3,19 +3,19 @@ import { IconButton, Typography } from "@material-ui/core";
 import CommentIcon from "@material-ui/icons/Comment";
 
 export default function CommentButton(props) {
-    const { getComments, comments } = props;
+    const { getReplies, numberOfReplies } = props;
 
     return (
         <React.Fragment>
             <IconButton
                 aria-label="reply"
-                onClick={getComments}
-                style={{ fontSize: "1.2em" }}
+                onClick={getReplies}
+                style={{ fontSize: "1.1em" }}
             >
                 <CommentIcon fontSize="inherit" />
             </IconButton>
             <Typography variant="overline">
-                {comments * 1 > 0 ? comments : "  "}
+                {numberOfReplies * 1 > 0 ? numberOfReplies : "  "}
             </Typography>
         </React.Fragment>
     );
