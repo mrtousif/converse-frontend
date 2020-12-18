@@ -12,19 +12,19 @@ function ReplyList(props) {
         variables: {
             commentId,
         },
-        onError(err) {
-            console.log(err);
-        },
     });
 
     if (loading) return <Loading />;
-    if (error) return <p>Error :(</p>;
+    if (error) {
+        console.log(error);
+        return <p>Error :(</p>;
+    }
     // React.useEffect(()=> {
 
     // })
 
     return (
-        <Grid container style={{ paddingLeft: "3em" }}>
+        <Grid container direction="column" style={{ paddingLeft: "3em" }}>
             <AddReply commentId={commentId} />
             {data.getReplies.map((reply) => (
                 <Reply key={reply._id} reply={reply} />

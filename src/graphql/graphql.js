@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
-export const CREATE_COMMENT = gql`
-    mutation createComment($postId: ID!, $body: String!, $pageUrl: String!) {
-        createComment(postId: $postId, body: $body, pageUrl: $pageUrl) {
+export const GET_COMMENTS = gql`
+    query getComments($postId: ID!) {
+        getComments(postId: $postId) {
             _id
             body
             likes
@@ -18,9 +18,9 @@ export const CREATE_COMMENT = gql`
     }
 `;
 
-export const GET_COMMENTS = gql`
-    query getComments($postId: ID!) {
-        getComments(postId: $postId) {
+export const CREATE_COMMENT = gql`
+    mutation createComment($postId: ID!, $body: String!, $pageUrl: String!) {
+        createComment(postId: $postId, body: $body, pageUrl: $pageUrl) {
             _id
             body
             likes
