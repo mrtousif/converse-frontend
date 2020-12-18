@@ -1,8 +1,4 @@
 import React, { useState } from "react";
-import {
-    // Container,
-    Grid,
-} from "@material-ui/core";
 import UserProvider from "../contexts/UserProvider";
 import { useMutation } from "@apollo/client";
 import { CREATE_COMMENT, GET_COMMENTS } from "../graphql/graphql";
@@ -57,16 +53,14 @@ function AddComment(props) {
     };
 
     return (
-        <Grid container>
-            <AddOpinion
-                opinion={comment}
-                setOpinion={setComment}
-                submitOpinion={submitComment}
-                loading={loading}
-                postBtnPressed={postBtnPressed}
-                setPostBtnPressed={setPostBtnPressed}
-            />
-        </Grid>
+        <AddOpinion
+            opinion={comment}
+            setOpinion={setComment}
+            submitOpinion={submitComment}
+            loading={loading}
+            postBtnPressed={postBtnPressed}
+            setPostBtnPressed={setPostBtnPressed}
+        />
     );
 }
 

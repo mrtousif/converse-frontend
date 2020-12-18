@@ -4,6 +4,7 @@ import { Grid, Grow } from "@material-ui/core";
 import UserProvider from "../contexts/UserProvider";
 // import { Link as RouterLink } from "react-router-dom";
 import ReplyList from "./ReplyList";
+import AddReply from "./AddReply";
 import { useMutation } from "@apollo/client";
 import { DELETE_COMMENT, GET_COMMENTS, LIKE_COMMENT } from "../graphql/graphql";
 import Opinion from "./Opinion";
@@ -99,7 +100,7 @@ function Comment(props) {
 
     return (
         <Grow in={true}>
-            <Grid container>
+            <Grid container direction="column">
                 <Opinion
                     opinion={props.comment}
                     getReplies={getReplies}
@@ -109,7 +110,12 @@ function Comment(props) {
                     deleteOpinion={deleteOpinion}
                     userLiked={userLiked}
                 />
-                {viewReplies ? <ReplyList commentId={_id} /> : null}
+                {viewReplies ? (
+                    <>
+                        <AddReply commentId={_id} />
+                        <ReplyList commentId={_id} />
+                    </>
+                ) : null}
             </Grid>
         </Grow>
     );

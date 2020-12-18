@@ -12,7 +12,7 @@ function CommentList(props) {
     //: "5fb3dc259f33b144981e2d4f"
     const { loading, error, data } = useQuery(GET_COMMENTS, {
         variables: {
-            postId: "5fb3dc259f33b144981e2d4f",
+            postId,
         },
     });
 

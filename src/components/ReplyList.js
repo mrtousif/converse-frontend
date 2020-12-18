@@ -3,7 +3,6 @@ import { Divider, Grid } from "@material-ui/core";
 import { useQuery } from "@apollo/client";
 import { GET_REPLIES } from "../graphql/graphql";
 import Loading from "./Loading";
-import AddReply from "./AddReply";
 import Reply from "./Reply";
 
 function ReplyList(props) {
@@ -25,7 +24,6 @@ function ReplyList(props) {
 
     return (
         <Grid container direction="column" style={{ paddingLeft: "3em" }}>
-            <AddReply commentId={commentId} />
             {data.getReplies.map((reply) => (
                 <Reply key={reply._id} reply={reply} />
             ))}

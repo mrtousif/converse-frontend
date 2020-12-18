@@ -1,8 +1,4 @@
 import React, { useState } from "react";
-import {
-    // Container,
-    Grid,
-} from "@material-ui/core";
 import UserProvider from "../contexts/UserProvider";
 import AddOpinion from "./AddOpinion";
 import { useMutation } from "@apollo/client";
@@ -61,16 +57,14 @@ function AddReply(props) {
     };
 
     return (
-        <Grid container>
-            <AddOpinion
-                opinion={reply}
-                setOpinion={setReply}
-                submitOpinion={submitReply}
-                loading={loading}
-                postBtnPressed={postBtnPressed}
-                setPostBtnPressed={setPostBtnPressed}
-            />
-        </Grid>
+        <AddOpinion
+            opinion={reply}
+            setOpinion={setReply}
+            submitOpinion={submitReply}
+            loading={loading}
+            postBtnPressed={postBtnPressed}
+            setPostBtnPressed={setPostBtnPressed}
+        />
     );
 }
 
