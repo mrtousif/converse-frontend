@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import * as zoid from "zoid/dist/zoid.frameworks";
 //const zoidComponent =
 const localhost = "http://localhost:1234";
-const publicUrl = "https://adilide-converse.vercel.com";
+const publicUrl = "https://adilide-converse.vercel.app/";
 
 const zoidComponent = zoid.create({
     tag: "converse-presentation",
@@ -13,6 +13,8 @@ const zoidComponent = zoid.create({
         height: true,
     },
 });
+
+// console.log(process.env.NODE_ENV);
 
 const ReactComponent = zoidComponent.driver("react", {
     React: React,
