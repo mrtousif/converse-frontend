@@ -31,12 +31,12 @@ function Comment(props) {
                         postId,
                     },
                 });
-                console.log(data);
+                // console.log(data);
                 // filtering out the deleted post
                 const filteredComments = data.getComments.filter(
                     (comment) => comment._id !== _id
                 );
-                console.log(filteredComments);
+                // console.log(filteredComments);
                 proxy.writeQuery({
                     query: GET_COMMENTS,
                     variables: {

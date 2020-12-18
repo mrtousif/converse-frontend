@@ -19,7 +19,7 @@ function AddComment(props) {
                     variables: { postId },
                 });
 
-                console.log(data);
+                // console.log(data);
                 proxy.writeQuery({
                     query: GET_COMMENTS,
                     variables: { postId },

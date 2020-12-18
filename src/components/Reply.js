@@ -12,9 +12,9 @@ function Reply(props) {
     const { _id } = props.reply;
 
     const [likeReply] = useMutation(LIKE_REPLY, {
-        update(proxy, result) {
-            console.log(result);
-        },
+        // update(proxy, result) {
+        //     console.log(result);
+        // },
         onError(err) {
             console.warn(err);
             return err;
