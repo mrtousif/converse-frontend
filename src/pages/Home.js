@@ -42,7 +42,7 @@ function Home(props) {
             <Grid
                 container
                 direction="column"
-                style={{ paddingLeft: "0.3em", paddingRight: "0.3em" }}
+                style={{ paddingLeft: "0.2em", paddingRight: "0.2em" }}
             >
                 <AddComment postId={postId} pageUrl={pageUrl} />
                 <CommentList postId={postId} pageUrl={pageUrl} />

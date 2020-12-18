@@ -53,8 +53,10 @@ export default function Login(props) {
         },
 
         onError(err) {
+            console.error(err);
             const message = err.graphQLErrors[0].message;
             setErrMsg(message);
+            return err;
         },
     });
 
