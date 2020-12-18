@@ -14,7 +14,7 @@ const httpLink = createHttpLink({
 
 const authLink = setContext(() => {
     const token = localStorage.getItem("token");
-    if (token.length < 15) return;
+    // if (token && token.length < 15) return;
 
     return {
         headers: {
