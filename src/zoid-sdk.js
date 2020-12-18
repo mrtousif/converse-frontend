@@ -1,8 +1,8 @@
 // import React from "react";
 // import ReactDOM from "react-dom";
 import * as zoid from "zoid/dist/zoid.frameworks";
-
-const zoidComponent = zoid.create({
+//const zoidComponent =
+zoid.create({
     tag: "converse-presentation",
     url: "https://converse.vercel.com",
     autoResize: {
