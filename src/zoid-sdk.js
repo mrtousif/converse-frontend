@@ -3,11 +3,11 @@ import ReactDOM from "react-dom";
 import * as zoid from "zoid/dist/zoid.frameworks";
 //const zoidComponent =
 const localhost = "http://localhost:1234";
-//"https://adilide-converse.vercel.com"
+const publicUrl = "https://adilide-converse.vercel.com";
 
 const zoidComponent = zoid.create({
     tag: "converse-presentation",
-    url: localhost,
+    url: process.env.NODE_ENV === "development" ? localhost : publicUrl,
     autoResize: {
         width: false,
         height: true,
