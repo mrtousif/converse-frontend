@@ -44,7 +44,7 @@ function authReducer(state, action) {
 
 function UserProvider(props) {
     const [state, dispatch] = React.useReducer(authReducer, initialState);
-    const [token, setToken] = useLocalStorageState("token");
+    const [token, setToken] = useLocalStorageState("token", "");
     decodeToken(token);
     // React.useEffect(() => decodeToken());
 
