@@ -4,7 +4,7 @@ import * as zoid from "zoid/dist/zoid.frameworks";
 
 const zoidComponent = zoid.create({
     tag: "converse-presentation",
-    url: "http://localhost:1234",
+    url: "https://converse.vercel.com",
     autoResize: {
         width: false,
         height: true,
