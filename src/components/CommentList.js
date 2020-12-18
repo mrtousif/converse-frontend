@@ -10,7 +10,6 @@ import Loading from "./Loading";
 function CommentList(props) {
     const { postId } = props;
 
-    // console.log(likedComments);
     //: "5fb3dc259f33b144981e2d4f"
     const { loading, error, data } = useQuery(GET_COMMENTS, {
         variables: {
@@ -24,7 +23,12 @@ function CommentList(props) {
     // let result;
 
     return (
-        <Grid container direction="column" spacing={1} style={{ paddingRight: "0.4em" }}>
+        <Grid
+            container
+            direction="column"
+            spacing={1}
+            style={{ paddingLeft: "0.3em", paddingRight: "0.3em" }}
+        >
             {data.getComments.map((comment) => (
                 <Comment key={comment._id} comment={comment} postId={postId} />
             ))}

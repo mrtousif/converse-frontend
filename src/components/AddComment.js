@@ -3,7 +3,6 @@ import {
     // Container,
     Grid,
 } from "@material-ui/core";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import UserProvider from "../contexts/UserProvider";
 import { useMutation } from "@apollo/client";
 import { CREATE_COMMENT, GET_COMMENTS } from "../graphql/graphql";
@@ -32,7 +31,7 @@ function AddComment(props) {
                         getComments: [result.data.createComment, ...data.getComments],
                     },
                 });
-                setComment;
+                setComment("");
                 setPostBtnPressed(false);
             } catch (error) {
                 console.error(error);

@@ -1,3 +1,5 @@
+// import React from "react";
+// import ReactDOM from "react-dom";
 import * as zoid from "zoid/dist/zoid.frameworks";
 
 const zoidComponent = zoid.create({
@@ -9,7 +11,12 @@ const zoidComponent = zoid.create({
     },
 });
 
-const title = document.querySelector("#title");
+// const ReactComponent = zoidComponent.driver("react", {
+//     React: React,
+//     ReactDOM: ReactDOM,
+// });
+
+// const title = document.querySelector("#title");
 const hostData = {};
 
 if (window.xprops) {
@@ -20,13 +27,13 @@ if (window.xprops) {
     hostData.backgroundColor = window.xprops.backgroundColor;
     hostData.darkOrLight = lightOrDark(window.xprops.backgroundColor);
 
-    document.addEventListener(
-        "click",
-        () => {
-            window.xprops.updateBackgroundColor("target", "beige");
-        },
-        false
-    );
+    // document.addEventListener(
+    //     "click",
+    //     () => {
+    //         window.xprops.updateBackgroundColor("target", "beige");
+    //     },
+    //     false
+    // );
 }
 
 function lightOrDark(color) {
@@ -70,5 +77,5 @@ function lightOrDark(color) {
 // );
 // window.getComputedStyle(document.body, null).getPropertyValue("width");
 // ~document.body.clientWidth;
-
-export default hostData;
+//ReactComponent,
+export { hostData };

@@ -3,7 +3,6 @@ import {
     // Container,
     Grid,
 } from "@material-ui/core";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import UserProvider from "../contexts/UserProvider";
 import AddOpinion from "./AddOpinion";
 import { useMutation } from "@apollo/client";

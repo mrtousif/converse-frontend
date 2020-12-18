@@ -182,11 +182,7 @@ function NavBar(props) {
                     {userCtx.user ? (
                         UserButton
                     ) : (
-                        <Button
-                            className={classes.btn}
-                            href={`http://localhost:1234/login`}
-                            target="_blank"
-                        >
+                        <Button className={classes.btn} href={`/login`} target="_blank">
                             Log in
                         </Button>
                     )}

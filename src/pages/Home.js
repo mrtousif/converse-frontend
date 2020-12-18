@@ -10,7 +10,7 @@ import NavBar from "../components/NavBar";
 
 function Home(props) {
     // console.log(props.hostData);
-    const { postId, pageUrl, darkOrLight } = props.hostData;
+    const { postId, pageUrl } = props.hostData;
     // const [totalComments, setTotalComments] = useState(0);
     // const [sortBy, setSortBy] = useState(null);
     // const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");

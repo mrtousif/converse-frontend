@@ -3,13 +3,7 @@ import ReactDOM from "react-dom";
 import App from "./App";
 // import reportWebVitals from "./reportWebVitals";
 // import "regenerator-runtime/runtime";
-import hostData from "./zoid-sdk";
-
-// console.log(
-//     window.getComputedStyle(document.body, null).getPropertyValue("background-color")
-// );
-// window.getComputedStyle(document.body, null).getPropertyValue("width");
-// ~document.body.clientWidth;
+import { hostData } from "./zoid-sdk";
 
 ReactDOM.render(<App hostData={hostData} />, document.getElementById("root"));
 

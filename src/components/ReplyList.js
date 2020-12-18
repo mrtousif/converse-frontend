@@ -29,6 +29,7 @@ function ReplyList(props) {
             {data.getReplies.map((reply) => (
                 <Reply key={reply._id} reply={reply} />
             ))}
+            <Divider />
         </Grid>
     );
 }

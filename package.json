@@ -18,13 +18,15 @@
         "react-scripts": "4.0.0",
         "use-local-storage-state": "^6.0.0",
         "use-persisted-state": "^0.3.0",
-        "web-vitals": "^0.2.4"
+        "web-vitals": "^0.2.4",
+        "zoid": "^9.0.63"
     },
     "scripts": {
         "start": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
-        "eject": "react-scripts eject"
+        "eject": "react-scripts eject",
+        "serve": "serve -s build"
     },
     "eslintConfig": {
         "extends": [

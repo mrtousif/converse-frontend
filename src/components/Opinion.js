@@ -8,7 +8,7 @@ import CommentButton from "./CommentButton";
 import UserProvider from "../contexts/UserProvider";
 
 export default function Opinion(props) {
-    const { user, _id, body, createdAt, likes } = props.opinion;
+    const { user, body, createdAt, likes } = props.opinion;
     const {
         likeOpinion,
         dislikeOpinion,

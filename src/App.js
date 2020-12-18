@@ -15,7 +15,7 @@ import blue from "@material-ui/core/colors/blue";
 const primaryColor = blue[700];
 
 function App(props) {
-    const hostData = props.hostData || {};
+    const hostData = props.hostData;
     // if (WEBSITE_ID) console.log(WEBSITE_ID);
 
     const theme = React.useMemo(
