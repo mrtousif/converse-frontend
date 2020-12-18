@@ -1,5 +1,5 @@
 import React from "react";
-import { Container } from "@material-ui/core";
+import { Container, Grid } from "@material-ui/core";
 import CommentList from "../components/CommentList";
 import AddComment from "../components/AddComment";
 // import Notification from "../components/Notification";
@@ -39,8 +39,14 @@ function Home(props) {
     return (
         <Container maxWidth="md">
             <NavBar />
-            <AddComment postId={postId} pageUrl={pageUrl} />
-            <CommentList postId={postId} pageUrl={pageUrl} />
+            <Grid
+                container
+                direction="column"
+                style={{ paddingLeft: "0.3em", paddingRight: "0.3em" }}
+            >
+                <AddComment postId={postId} pageUrl={pageUrl} />
+                <CommentList postId={postId} pageUrl={pageUrl} />
+            </Grid>
         </Container>
     );
 }

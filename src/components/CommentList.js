@@ -4,7 +4,6 @@ import { Grid } from "@material-ui/core";
 import { useQuery } from "@apollo/client";
 import { GET_COMMENTS } from "../graphql/graphql";
 import Loading from "./Loading";
-// import AddComment from "./AddComment";
 // import UserProvider from "../contexts/UserProvider";
 
 function CommentList(props) {
@@ -23,12 +22,7 @@ function CommentList(props) {
     // let result;
 
     return (
-        <Grid
-            container
-            direction="column"
-            spacing={1}
-            style={{ paddingLeft: "0.3em", paddingRight: "0.3em" }}
-        >
+        <Grid container direction="column" spacing={1}>
             {data.getComments.map((comment) => (
                 <Comment key={comment._id} comment={comment} postId={postId} />
             ))}

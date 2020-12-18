@@ -1,20 +1,23 @@
-// import React from "react";
-// import ReactDOM from "react-dom";
+import React from "react";
+import ReactDOM from "react-dom";
 import * as zoid from "zoid/dist/zoid.frameworks";
 //const zoidComponent =
-zoid.create({
+const localhost = "http://localhost:1234";
+//"https://adilide-converse.vercel.com"
+
+const zoidComponent = zoid.create({
     tag: "converse-presentation",
-    url: "https://adilide-converse.vercel.com",
+    url: localhost,
     autoResize: {
         width: false,
         height: true,
     },
 });
 
-// const ReactComponent = zoidComponent.driver("react", {
-//     React: React,
-//     ReactDOM: ReactDOM,
-// });
+const ReactComponent = zoidComponent.driver("react", {
+    React: React,
+    ReactDOM: ReactDOM,
+});
 
 // const title = document.querySelector("#title");
 const hostData = {};
@@ -78,4 +81,4 @@ function lightOrDark(color) {
 // window.getComputedStyle(document.body, null).getPropertyValue("width");
 // ~document.body.clientWidth;
 //ReactComponent,
-export { hostData };
+export { hostData, ReactComponent };
