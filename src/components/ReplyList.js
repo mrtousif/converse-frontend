@@ -23,7 +23,7 @@ function ReplyList(props) {
     // })
 
     return (
-        <Grid container direction="column" style={{ paddingLeft: "3em" }}>
+        <Grid container direction="column">
             {data.getReplies.map((reply) => (
                 <Reply key={reply._id} reply={reply} />
             ))}

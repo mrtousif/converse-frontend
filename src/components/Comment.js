@@ -100,7 +100,7 @@ function Comment(props) {
 
     return (
         <Grow in={true}>
-            <Grid container direction="column">
+            <Grid container direction="column" style={{ paddingLeft: "3em" }}>
                 <Opinion
                     opinion={props.comment}
                     getReplies={getReplies}
