@@ -100,7 +100,7 @@ function Comment(props) {
 
     return (
         <Grow in={true}>
-            <Grid container direction="column" style={{ paddingLeft: "3em" }}>
+            <Grid container direction="column">
                 <Opinion
                     opinion={props.comment}
                     getReplies={getReplies}
@@ -111,10 +111,10 @@ function Comment(props) {
                     userLiked={userLiked}
                 />
                 {viewReplies ? (
-                    <>
+                    <div style={{ paddingLeft: "3em" }}>
                         <AddReply commentId={_id} />
                         <ReplyList commentId={_id} />
-                    </>
+                    </div>
                 ) : null}
             </Grid>
         </Grow>
