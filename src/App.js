@@ -7,12 +7,10 @@ import UserProvider from "./contexts/UserProvider";
 import ApolloProvider from "./ApolloProvider";
 import { CssBaseline } from "@material-ui/core"; //useMediaQuery,
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles"; //createMuiTheme,
-// import theme from "./theme";
+// import theme2 from "./theme";
 // import "./app.css";
 import blue from "@material-ui/core/colors/blue";
 // import orange from '@material-ui/core/colors/orange';
-
-const primaryColor = blue[700];
 
 function App(props) {
     const hostData = props.hostData;
@@ -24,10 +22,10 @@ function App(props) {
                 palette: {
                     type: hostData.darkOrLight || "light",
                     background: {
-                        default: "inherit",
+                        default: hostData.backgroundColor || "#fff",
                     },
                     primary: {
-                        main: primaryColor,
+                        main: blue[700],
                     },
                 },
             }),
@@ -48,6 +46,7 @@ function App(props) {
                                     <Home {...props} hostData={hostData} />
                                 )}
                             />
+
                             <Route exact path="/login" component={Login} />
                             <Route exact path="/signup" component={Signup} />
                         </Switch>

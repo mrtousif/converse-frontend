@@ -8,7 +8,7 @@ const primaryColor = blue[700];
 const theme = createMuiTheme({
     palette: {
         background: {
-            default: "inherit",
+            default: "#fff",
         },
         primary: {
             main: primaryColor,
