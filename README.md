@@ -2,6 +2,8 @@
 
 This the front-end repository. It's backend repo at
 
+API is hosted on Heroku. So expect some delay.
+
 Some of the libraries used React, Material UI, Apollo GraphQL Client,
 React Hook Form, React Router, Date fns,
 
