@@ -1,4 +1,9 @@
-# Getting Started with Create React App
+# Embedable Commenting System
+
+This the front-end repository. It's backend repo at
+
+Some of the libraries used React, Material UI, Apollo GraphQL Client,
+React Hook Form, React Router, Date fns,
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

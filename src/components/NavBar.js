@@ -121,7 +121,7 @@ function NavBar(props) {
                 </Menu>
             </React.Fragment>
         );
-
+    // ${totalComments || 0}
     return (
         <Paper square className={classes.paper}>
             <Grid container>
@@ -129,7 +129,7 @@ function NavBar(props) {
                     <Tabs value={0}>
                         <Tab
                             style={{ textTransform: "none" }}
-                            label={`${totalComments || 0} Comments`}
+                            label={` Comments`}
                             disableRipple
                         />
 
