@@ -6,10 +6,10 @@ import Signup from "./pages/Signup";
 import UserProvider from "./contexts/UserProvider";
 import ApolloProvider from "./ApolloProvider";
 import { CssBaseline } from "@material-ui/core"; //useMediaQuery,
-import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles"; //createMuiTheme,
+import { ThemeProvider } from "@material-ui/core/styles"; //createMuiTheme,
 import theme from "./theme";
 // import "./app.css";
-import blue from "@material-ui/core/colors/blue";
+// import blue from "@material-ui/core/colors/blue";
 // import orange from '@material-ui/core/colors/orange';
 
 function App(props) {

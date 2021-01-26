@@ -40,11 +40,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function NavBar(props) {
-    const {
-        totalComments,
-        //  sortComments
-    } = props;
+function NavBar() {
+    // const {
+    //     totalComments,
+    //     //  sortComments
+    // } = props;
     const classes = useStyles();
     const userCtx = useContext(UserProvider.context);
 
