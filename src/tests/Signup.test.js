@@ -1,9 +1,9 @@
 import React from "react";
-import Home from "../pages/Home";
+import Signup from "../pages/Signup";
 import { shallow } from "@testing-library/react";
 
-describe("Home", () => {
+describe("Signup", () => {
     it("should header component", () => {
-        expect(shallow(<Home />)).toMatchSnapshot();
+        expect(shallow(<Signup />)).toMatchSnapshot();
     });
 });

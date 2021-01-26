@@ -7,6 +7,7 @@ import AddComment from "../components/AddComment";
 // import { useLazyQuery } from "@apollo/client";
 // import UserProvider from "../contexts/UserProvider";
 import NavBar from "../components/NavBar";
+import ErrorBoundary from "../ErrorBoundary";
 
 function Home(props) {
     // console.log(props.hostData);
@@ -44,8 +45,10 @@ function Home(props) {
                 direction="column"
                 style={{ paddingLeft: "0.2em", paddingRight: "0.2em" }}
             >
-                <AddComment postId={postId} pageUrl={pageUrl} />
-                <CommentList postId={postId} pageUrl={pageUrl} />
+                <ErrorBoundary>
+                    <AddComment postId={postId} pageUrl={pageUrl} />
+                    <CommentList postId={postId} pageUrl={pageUrl} />
+                </ErrorBoundary>
             </Grid>
         </Container>
     );
