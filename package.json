@@ -18,7 +18,7 @@
         "react-router-dom": "^5.2.0",
         "react-scripts": "4.0.0",
         "use-local-storage-state": "^6.0.0",
-        "use-persisted-state": "^0.3.0",
+        "use-persisted-state": "^0.3.3",
         "web-vitals": "^0.2.4",
         "zoid": "^9.0.63"
     },
